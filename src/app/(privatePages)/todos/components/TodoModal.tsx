@@ -22,14 +22,13 @@ const TodoModal: React.FC<TodoModalProps> = ({ open, onClose, onAddTodo }) => {
 
   const handleClose = () => {
     setTodoText("");
+    setTodoDescription("");
     onClose();
   };
 
   const handleAddTodo = () => {
     onAddTodo(todoText, todoDescription);
-    setTodoText("");
-    setTodoDescription("");
-    onClose();
+    handleClose();
   };
 
   return (

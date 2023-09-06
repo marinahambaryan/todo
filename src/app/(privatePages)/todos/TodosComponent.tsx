@@ -33,8 +33,12 @@ const TodosComponent: React.FC = () => {
     if (!todoText || !todoDescription) {
       return;
     }
-    const data = await createTodo(todoText, todoDescription);
-    setTodos((prevProps: TodoInterface[]) => [...prevProps, data]);
+    try {
+      const data = await createTodo(todoText, todoDescription);
+      setTodos((prevProps: TodoInterface[]) => [...prevProps, data]);
+    } catch (error) {
+      console.error({ error });
+    }
   };
 
   const handleStatusChange = async (id: string, isCompleted: boolean) => {
@@ -48,7 +52,7 @@ const TodosComponent: React.FC = () => {
       });
       setTodos(newTodos);
     } catch (error) {
-      console.log({ error });
+      console.error({ error });
     }
   };
 
@@ -69,7 +73,7 @@ const TodosComponent: React.FC = () => {
       await updateTodo(id, data);
       setTodos(newTodos);
     } catch (error) {
-      console.log({ error });
+      console.error({ error });
     }
   };
 

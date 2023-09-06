@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ReactFlow, {
   addEdge,
   applyEdgeChanges,
@@ -50,6 +50,7 @@ const Flow: React.FC<Props> = ({
           text,
           description,
           completed,
+          position,
           handleStatusChange: () => handleStatusChange(_id, !completed),
           handleDelete: () => handleDelete(_id),
           handleUpdate: (data: TodoUpdateInterface) => handleUpdate(_id, data),
@@ -61,24 +62,28 @@ const Flow: React.FC<Props> = ({
     setNodes(newTodoNodes);
   }, [todos]);
 
-  const onNodesChange: OnNodesChange = useCallback(
-    (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
-    [setNodes]
-  );
-  const onEdgesChange: OnEdgesChange = useCallback(
-    (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
-    [setEdges]
-  );
-  const onConnect: OnConnect = useCallback(
-    (connection) => setEdges((eds) => addEdge(connection, eds)),
-    [setEdges]
-  );
+  const onNodesChange: OnNodesChange = (changes) =>
+    setNodes((nds) => applyNodeChanges(changes, nds));
+
+  const onEdgesChange: OnEdgesChange = (changes) =>
+    setEdges((eds) => applyEdgeChanges(changes, eds));
+
+  const onConnect: OnConnect = (connection) =>
+    setEdges((eds) => addEdge(connection, eds));
 
   const onNodeDragStop = (
     event: React.MouseEvent,
     node: Node,
     nodes: Node[]
   ) => {
+    if (
+      node.data.position.x === node.position.x &&
+      node.data.position.y === node.position.y
+    ) {
+      console.log("here");
+      return;
+    }
+    console.log("onNodeDragStop", event, node);
     handleUpdate(node.data.id, { position: node.position });
   };
 

@@ -1,10 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Handle, Position } from "reactflow";
 import { Box, Button, TextField, IconButton, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import CircularProgress from "@mui/material/CircularProgress";
 
 import { TodoUpdateInterface } from "@/utils/types";
 
@@ -31,41 +29,40 @@ function TodoNode({ data, isConnectable }: Props) {
     handleUpdate,
     handleStatusChange,
   } = data;
+
   const [newText, setNewText] = useState(text);
   const [newDescription, setNewDescription] = useState(description);
-  const [isEditModeOn, setIsEditModeOn] = useState(false);
-  const [loading, setLoading] = useState(false);
 
-  const toggleEdit = () => {
-    setIsEditModeOn((prevState) => !prevState);
-  };
-
-  const onUpdate = async () => {
+  const onUpdate = async (e: React.MouseEvent) => {
+    e.preventDefault();
     let updatedTodo = {
       text: newText,
       description: newDescription,
     };
-    setLoading(true);
     try {
       await handleUpdate(updatedTodo);
-      setIsEditModeOn(false);
     } catch (error) {
-      console.log({ error });
-    } finally {
-      setLoading(false);
+      console.error({ error });
     }
   };
 
-  const onStatusChange = async () => {
+  const onStatusChange = async (e: React.MouseEvent) => {
+    e.preventDefault();
     try {
-      setLoading(true);
       await handleStatusChange();
     } catch (error) {
-      console.log({ error });
-    } finally {
-      setLoading(false);
+      console.error({ error });
     }
   };
+
+  const onDelete = (e: React.MouseEvent) => {
+    e.preventDefault();
+    handleDelete();
+  };
+
+  const isEditted = useMemo(() => {
+    return text !== newText || description !== newDescription;
+  }, [newText, newDescription, text, description]);
 
   return (
     <Box
@@ -76,80 +73,67 @@ function TodoNode({ data, isConnectable }: Props) {
         borderRadius: "10px",
       }}
     >
-      {loading ? (
-        <CircularProgress />
-      ) : (
-        <>
-          <Handle
-            type="target"
-            id="a"
-            position={Position.Top}
-            isConnectable={isConnectable}
-          />
+      <>
+        <Handle
+          type="target"
+          id="a"
+          position={Position.Top}
+          isConnectable={isConnectable}
+        />
+        <Box>
+          <Typography>
+            {isEditted && "Save in order to apply the changes"}
+          </Typography>
+          <Box style={{ display: "flex", justifyContent: "end" }}>
+            <IconButton aria-label="delete" onClick={onDelete}>
+              <DeleteIcon />
+            </IconButton>
+          </Box>
           <Box>
-            <Box style={{ display: "flex", justifyContent: "end" }}>
-              <IconButton aria-label="delete" onClick={handleDelete}>
-                <DeleteIcon />
-              </IconButton>
-
-              <IconButton aria-label="delete" onClick={toggleEdit}>
-                <EditIcon />
-              </IconButton>
-            </Box>
-            <Box>
-              {isEditModeOn ? (
-                <TextField
-                  label="Text"
-                  id="outlined-size-normal"
-                  defaultValue={text}
-                  onChange={(e) => setNewText(e.target.value)}
-                  style={{ width: "100%" }}
-                />
-              ) : (
-                <Typography variant="h5">{text}</Typography>
-              )}
-            </Box>
-            <Box style={{ paddingTop: "20px" }}>
-              {isEditModeOn ? (
-                <TextField
-                  label="Description"
-                  id="outlined-size-normal"
-                  defaultValue={description}
-                  onChange={(e) => setNewDescription(e.target.value)}
-                  style={{ width: "100%" }}
-                />
-              ) : (
-                <Typography variant="subtitle1">{description}</Typography>
-              )}
-            </Box>
-            {isEditModeOn && (
-              <Button
-                onClick={onUpdate}
-                color="primary"
-                variant="outlined"
-                style={{ marginTop: "10px", width: "100%" }}
-              >
-                Save
-              </Button>
-            )}
+            <TextField
+              label="Text"
+              id="outlined-size-normal"
+              defaultValue={text}
+              onChange={(e) => setNewText(e.target.value)}
+              style={{ width: "100%" }}
+            />
+          </Box>
+          <Box style={{ paddingTop: "20px" }}>
+            <TextField
+              label="Description"
+              id="outlined-size-normal"
+              defaultValue={description}
+              onChange={(e) => setNewDescription(e.target.value)}
+              style={{ width: "100%" }}
+            />
+          </Box>
+          {isEditted && (
             <Button
-              onClick={onStatusChange}
+              onClick={onUpdate}
               color="primary"
-              variant="contained"
+              variant="outlined"
               style={{ marginTop: "10px", width: "100%" }}
             >
-              Mark as {completed ? "ToDo" : "Complete"}
+              Save
             </Button>
-          </Box>
+          )}
+          <Button
+            onClick={onStatusChange}
+            color="primary"
+            variant="contained"
+            style={{ marginTop: "10px", width: "100%" }}
+          >
+            Mark as {completed ? "ToDo" : "Complete"}
+          </Button>
+        </Box>
 
-          <Handle
-            type="source"
-            position={Position.Bottom}
-            id="b"
-            isConnectable={isConnectable}
-          />
-        </>
-      )}
+        <Handle
+          type="source"
+          position={Position.Bottom}
+          id="b"
+          isConnectable={isConnectable}
+        />
+      </>
     </Box>
   );
 }

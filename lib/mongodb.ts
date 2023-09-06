@@ -6,7 +6,6 @@ let client: MongoClient;
 let clientPromise: Promise<MongoClient>;
 
 const options: any = {
-  useNewUrlParser: true,
   useUnifiedTopology: true,
 };
 
