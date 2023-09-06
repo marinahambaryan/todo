@@ -1,21 +1,20 @@
 import { MongoClient } from "mongodb";
+import { configValues } from "@/utils/config";
 
+const { DB_URI } = configValues;
 let client: MongoClient;
 let clientPromise: Promise<MongoClient>;
 
-const uri =
-  "mongodb+srv://marina:zudkyH-nyjwox-1merca@cluster0.yvftlkf.mongodb.net/";
-
 const options: any = {
-  // useNewUrlParser: true,
+  useNewUrlParser: true,
   useUnifiedTopology: true,
 };
 
-if (!uri) {
+if (!DB_URI) {
   throw new Error("Please add MONGODB_URL inside .env.local");
 }
 
-client = new MongoClient(uri!, options);
+client = new MongoClient(DB_URI, options);
 clientPromise = client.connect();
 
 clientPromise.then(() => console.log("Connected to mongodb atlas"));

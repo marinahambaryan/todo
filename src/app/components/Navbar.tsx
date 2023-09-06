@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-
+import { signOut } from "next-auth/react";
 import {
   AppBar,
   Box,
@@ -15,7 +15,9 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 
 import DrawerContent from "./DrawerContent";
-import { signOut } from "next-auth/react";
+import { configValues } from "@/utils/config";
+
+const { NEXT_PUBLIC_AUTH_URL } = configValues;
 
 const navItemsLoggedInState: NavItemInterface[] = [
   { page: "Charts", route: "/charts" },
@@ -78,7 +80,7 @@ const Navbar: React.FC = () => {
             ))}
             <Button
               variant="contained"
-              onClick={() => signOut({ callbackUrl: "http://localhost:3000/" })}
+              onClick={() => signOut({ callbackUrl: NEXT_PUBLIC_AUTH_URL })}
             >
               Sign Out
             </Button>

@@ -1,8 +1,11 @@
 import { TodoInterface, TodoUpdateInterface } from "../types";
 
+import { configValues } from "../config";
+const { NEXT_PUBLIC_AUTH_URL } = configValues;
+
 export const getTodos = async (): Promise<TodoInterface[]> => {
   try {
-    const response = await fetch("http://localhost:3000/api/todo", {
+    const response = await fetch(`${NEXT_PUBLIC_AUTH_URL}/api/todo`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -21,7 +24,7 @@ export const createTodo = async (
   description: string
 ): Promise<TodoInterface> => {
   try {
-    const data = await fetch("http://localhost:3000/api/todo", {
+    const data = await fetch(`${NEXT_PUBLIC_AUTH_URL}/api/todo`, {
       method: "POST",
       body: JSON.stringify({ text, description }),
       headers: {
@@ -37,7 +40,7 @@ export const createTodo = async (
 
 export const updateTodo = async (id: string, data: TodoUpdateInterface) => {
   try {
-    await fetch("http://localhost:3000/api/todo", {
+    await fetch(`${NEXT_PUBLIC_AUTH_URL}/api/todo`, {
       method: "PUT",
       body: JSON.stringify({ id, ...data }),
       headers: {
@@ -53,7 +56,7 @@ export const updateTodo = async (id: string, data: TodoUpdateInterface) => {
 
 export const deleteTodo = async (id: string) => {
   try {
-    const data = await fetch("http://localhost:3000/api/todo", {
+    const data = await fetch(`${NEXT_PUBLIC_AUTH_URL}/api/todo`, {
       method: "DELETE",
       body: JSON.stringify({ id }),
       headers: {
