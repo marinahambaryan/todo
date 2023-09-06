@@ -80,10 +80,8 @@ const Flow: React.FC<Props> = ({
       node.data.position.x === node.position.x &&
       node.data.position.y === node.position.y
     ) {
-      console.log("here");
       return;
     }
-    console.log("onNodeDragStop", event, node);
     handleUpdate(node.data.id, { position: node.position });
   };
 

@@ -28,7 +28,6 @@ export async function POST(req: NextRequest) {
       completed: false,
       position: { x: 100, y: 100 },
     };
-    console.log({ todo });
     const data = await collection.insertOne(todo);
     return NextResponse.json(
       { ...todo, _id: data.insertedId },
