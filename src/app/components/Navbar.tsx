@@ -17,8 +17,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import DrawerContent from "./DrawerContent";
 import { configValues } from "@/utils/config";
 
-const { NEXT_PUBLIC_AUTH_URL } = configValues;
-
 const navItemsLoggedInState: NavItemInterface[] = [
   { page: "Charts", route: "/charts" },
   { page: "Todos", route: "/todos" },
@@ -80,7 +78,7 @@ const Navbar: React.FC = () => {
             ))}
             <Button
               variant="contained"
-              onClick={() => signOut({ callbackUrl: NEXT_PUBLIC_AUTH_URL })}
+              onClick={() => signOut({ callbackUrl: "" })}
             >
               Sign Out
             </Button>
