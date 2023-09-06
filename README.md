@@ -23,6 +23,12 @@ Technologies Used: MUI, Next.js(full stack), TypeScript, MongoDB, chart.js
 3. Add real user authentication
 4. Better state management
 5. config .env
+6. separate credentials
+7. UI changes
 
 ## Deployed version of the project
-[]
+[https://todo-five-rosy.vercel.app]
+
+# Auth credentials
+email - admin@example.com
+password - admin
