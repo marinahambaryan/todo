@@ -58,7 +58,7 @@ export async function PUT(req: NextRequest) {
     if (description && todo.description !== description) {
       newTodo.description = description;
     }
-    if (completed && todo.completed !== completed) {
+    if (completed !== undefined && todo.completed !== completed) {
       newTodo.completed = completed;
     }
     if (

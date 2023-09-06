@@ -1,4 +1,4 @@
-import { TodoInterface, TodoUpdateInterface } from "./types";
+import { TodoInterface, TodoUpdateInterface } from "../types";
 
 export const getTodos = async (): Promise<TodoInterface[]> => {
   try {
@@ -8,9 +8,7 @@ export const getTodos = async (): Promise<TodoInterface[]> => {
         "Content-Type": "application/json",
       },
     });
-    console.log({ response });
     const data = response.json();
-    console.log({ data });
     return data || [];
   } catch (error) {
     console.log({ error });
@@ -46,7 +44,6 @@ export const updateTodo = async (id: string, data: TodoUpdateInterface) => {
         "Content-Type": "application/json",
       },
     }).then((res) => res.json());
-    console.log({ data });
     return data;
   } catch (error) {
     console.error({ error });

@@ -1,14 +1,18 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { signOut } from "next-auth/react";
+import {
+  Box,
+  Divider,
+  List,
+  ListItem,
+  ListItemText,
+  Typography,
+  Button,
+  Drawer,
+} from "@mui/material";
 
-import Box from "@mui/material/Box";
-import Divider from "@mui/material/Divider";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
-import Typography from "@mui/material/Typography";
 import { NavItemInterface } from "@/utils/types";
-import { Button, Drawer } from "@mui/material";
 
 const drawerWidth = 240;
 
@@ -30,6 +34,7 @@ const DrawerContent: React.FC<Props> = ({
   useEffect(() => {
     setContainer(document !== undefined ? () => document.body : undefined);
   }, []);
+
   return (
     <Drawer
       container={container}
@@ -37,7 +42,7 @@ const DrawerContent: React.FC<Props> = ({
       open={mobileOpen}
       onClose={handleDrawerToggle}
       ModalProps={{
-        keepMounted: true, // Better open performance on mobile.
+        keepMounted: true,
       }}
       sx={{
         display: { xs: "block", sm: "none" },
@@ -66,6 +71,9 @@ const DrawerContent: React.FC<Props> = ({
             </ListItem>
           ))}
         </List>
+        <Button variant="outlined" onClick={() => signOut()}>
+          Sign Out
+        </Button>
       </Box>
     </Drawer>
   );

@@ -4,14 +4,13 @@ import Credentials from "next-auth/providers/credentials";
 export const authOptions: NextAuthOptions = {
   providers: [
     Credentials({
-      name: "Credentials",
+      name: "credentials",
       credentials: {
         email: { label: "Email" },
         password: { label: "Password" },
       },
       authorize(credentials, req) {
         // Perform database operations
-
         if (
           credentials?.email === "admin@example.com" &&
           credentials.password === "admin"
@@ -21,17 +20,13 @@ export const authOptions: NextAuthOptions = {
             email: "admin@example.com",
           };
         }
-
         return null;
       },
     }),
   ],
-  session: {
-    // strategy: "jwt",
-    maxAge: 4 * 60 * 60, // 4 hours
+  secret: "secret",
+  // secret: process.env.NEXTAUTH_SECRET,
+  pages: {
+    signIn: "/",
   },
-  //   pages: {
-  //     signIn: "/auth/signin",
-  //     newUser: "/auth/signup",
-  //   },
 };

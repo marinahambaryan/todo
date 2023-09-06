@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useState, useEffect, useRef } from "react";
+import React, { useCallback, useState, useEffect, useRef } from "react";
 import ReactFlow, {
   addEdge,
   applyEdgeChanges,
@@ -17,6 +17,7 @@ import ReactFlow, {
 import "reactflow/dist/style.css";
 
 import TodoNode from "./TodoNode";
+
 import { TodoInterface, TodoUpdateInterface } from "@/utils/types";
 
 const nodeTypes = { textUpdater: TodoNode };
@@ -27,12 +28,12 @@ interface Props {
   handleStatusChange: (id: string, isCompleted: boolean) => void;
   handleUpdate: (id: string, data: TodoUpdateInterface) => void;
 }
-function Flow({
+const Flow: React.FC<Props> = ({
   todos,
   handleDelete,
   handleStatusChange,
   handleUpdate,
-}: Props) {
+}: Props) => {
   const reactFlowWrapper = useRef(null);
 
   const [nodes, setNodes] = useState<Node[]>([]);
@@ -40,10 +41,10 @@ function Flow({
 
   useEffect(() => {
     const newTodoNodes: Node[] = [];
-    todos.forEach(({ _id, text, description, completed }) => {
+    todos.forEach(({ _id, text, description, completed, position }) => {
       let newTodo: Node = {
         id: _id,
-        position: { x: 100, y: 100 },
+        position,
         data: {
           id: _id,
           text,
@@ -61,9 +62,7 @@ function Flow({
   }, [todos]);
 
   const onNodesChange: OnNodesChange = useCallback(
-    (changes) => {
-      setNodes((nds) => applyNodeChanges(changes, nds));
-    },
+    (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
     [setNodes]
   );
   const onEdgesChange: OnEdgesChange = useCallback(
@@ -71,12 +70,17 @@ function Flow({
     [setEdges]
   );
   const onConnect: OnConnect = useCallback(
-    (connection) => {
-      console.log({ connection });
-      setEdges((eds) => addEdge(connection, eds));
-    },
+    (connection) => setEdges((eds) => addEdge(connection, eds)),
     [setEdges]
   );
+
+  const onNodeDragStop = (
+    event: React.MouseEvent,
+    node: Node,
+    nodes: Node[]
+  ) => {
+    handleUpdate(node.data.id, { position: node.position });
+  };
 
   return (
     <ReactFlowProvider>
@@ -87,6 +91,7 @@ function Flow({
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
+          onNodeDragStop={onNodeDragStop}
           nodeTypes={nodeTypes}
           fitView
         >
@@ -97,6 +102,6 @@ function Flow({
       </div>
     </ReactFlowProvider>
   );
-}
+};
 
 export default Flow;

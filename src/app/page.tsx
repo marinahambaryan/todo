@@ -1,8 +1,18 @@
-"use client";
-
 import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth";
 
-export default function Home() {
-  redirect("/todos");
-  return <main>Main page</main>;
+import LoginForm from "./components/LoginForm";
+
+import { authOptions } from "@/utils/authOptions";
+
+export default async function Home() {
+  const session = await getServerSession(authOptions);
+
+  if (session) redirect("/todos");
+
+  return (
+    <main>
+      <LoginForm />
+    </main>
+  );
 }

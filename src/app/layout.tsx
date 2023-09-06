@@ -1,6 +1,10 @@
 import "./globals.css";
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+
 import NextAuthSessionProvider from "./providers/sessionProvider";
+
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Todo App",
@@ -14,10 +18,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        {/* <NextAuthSessionProvider> */}
-        {children}
-        {/* </NextAuthSessionProvider> */}
+      <body className={inter.className}>
+        <NextAuthSessionProvider>{children}</NextAuthSessionProvider>
       </body>
     </html>
   );

@@ -13,14 +13,9 @@ import {
   ListItemButton,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { signIn, signOut } from "next-auth/react";
 
 import DrawerContent from "./DrawerContent";
-
-const navItemsLoggedOutState: NavItemInterface[] = [
-  { page: "Sign Up", route: "/sign-up" },
-  { page: "Sign In", route: "/sign-in" },
-];
+import { signOut } from "next-auth/react";
 
 const navItemsLoggedInState: NavItemInterface[] = [
   { page: "Charts", route: "/charts" },
@@ -35,10 +30,11 @@ interface NavItemInterface {
 const appName = "Todo App";
 
 const Navbar: React.FC = () => {
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState<boolean>(false);
   const [currentNavItems, setCurrentNavItems] = useState<NavItemInterface[]>(
     []
   );
+
   useEffect(() => {
     setCurrentNavItems(navItemsLoggedInState);
   }, []);
@@ -80,6 +76,12 @@ const Navbar: React.FC = () => {
                 </Link>
               </Button>
             ))}
+            <Button
+              variant="contained"
+              onClick={() => signOut({ callbackUrl: "http://localhost:3000/" })}
+            >
+              Sign Out
+            </Button>
           </Box>
         </Toolbar>
       </AppBar>
@@ -90,8 +92,6 @@ const Navbar: React.FC = () => {
           appName={appName}
           mobileOpen={mobileOpen}
         />
-        <Button onClick={() => signOut()}>Sign Out</Button>
-        <Button onClick={() => signIn()}>Sign In</Button>
       </Box>
     </Box>
   );

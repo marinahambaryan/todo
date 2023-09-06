@@ -1,10 +1,9 @@
 import React from "react";
-import Navbar from "../components/Navbar";
 import { Box } from "@mui/material";
 
-type Props = {};
+import Navbar from "../components/Navbar";
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
